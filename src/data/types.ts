@@ -8,3 +8,31 @@ export interface AuthState {
   } | null;
   token: string | null;
 }
+
+export interface Review {
+  username: string;
+  rating: number;
+  comment: string;
+}
+
+export interface Product {
+  id: number;
+  title: string;
+  type: string;
+  brand_id: number;
+  original_price: number;
+  sale_price: string | number;
+  rating: number;
+  review_count: number;
+  short_description: string;
+  detail_description: string;
+  additional_information: string;
+  colors: string[];
+  imageUrls: string[];
+  reviews: Review[];
+  isInWishlist: boolean;
+}
+
+export interface CarouselComponentProps {
+  carouselData: Product[];
+}

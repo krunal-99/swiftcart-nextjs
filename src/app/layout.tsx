@@ -4,7 +4,7 @@ import Navbar from "@/sections/Navbar";
 import Providers from "@/components/Providers";
 import SocialBar from "@/sections/SocialBar";
 import "./globals.css";
-import { createTheme } from "@mui/material";
+import { ToastContainer } from "react-toastify";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -27,6 +27,18 @@ export default function RootLayout({
       <body className={`${montserrat.variable}`}>
         <Providers>
           <SocialBar />
+          <ToastContainer
+            position="bottom-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            toastClassName="custom-toast"
+          />
           <Navbar />
           {children}
         </Providers>

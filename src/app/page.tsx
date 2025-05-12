@@ -1,3 +1,5 @@
+import HeroSection from "@/sections/HeroSection";
+
 export default function Home() {
-  return <></>;
+  return <HeroSection />;
 }

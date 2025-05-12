@@ -3,6 +3,7 @@
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const theme = createTheme({
   palette: {
@@ -34,9 +35,12 @@ const theme = createTheme({
 export type RootState = ReturnType<typeof store.getState>;
 
 export default function Providers({ children }: { children: React.ReactNode }) {
+  const client = new QueryClient();
   return (
     <Provider store={store}>
-      <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      <QueryClientProvider client={client}>
+        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+      </QueryClientProvider>
     </Provider>
   );
 }
