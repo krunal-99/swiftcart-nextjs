@@ -36,3 +36,9 @@ export interface Product {
 export interface CarouselComponentProps {
   carouselData: Product[];
 }
+
+export interface ProductState {
+  category: number;
+  brands: string[];
+  filteredProducts: Product[];
+}

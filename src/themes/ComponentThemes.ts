@@ -1,4 +1,4 @@
-import { styled } from "@mui/material";
+import { Paper, styled } from "@mui/material";
 import Link from "next/link";
 
 export const StyledNavLink = styled(Link)(() => ({
@@ -42,5 +42,32 @@ export const StyledDrawerNavLink = styled(Link)(() => ({
   "&.active .MuiListItemButton-root": {
     backgroundColor: "rgba(35, 166, 240, 0.08)",
     borderRadius: "8px",
+  },
+}));
+
+export const CategoryItem = styled(Paper)(({ theme }) => ({
+  position: "relative",
+  overflow: "hidden",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  cursor: "pointer",
+  width: "100%",
+  height: "100%",
+  "& img": {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+  },
+  "& .label": {
+    position: "absolute",
+    bottom: theme.spacing(2),
+    left: theme.spacing(3),
+    backgroundColor: "white",
+    padding: theme.spacing(1.5, 4),
+    fontWeight: 700,
+    fontSize: "16px",
+    lineHeight: "24px",
+    color: "#252b42",
   },
 }));

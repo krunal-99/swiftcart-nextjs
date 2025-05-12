@@ -111,6 +111,7 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({
       customLeftArrow={<CustomLeftArrow />}
       customRightArrow={<CustomRightArrow />}
       customDot={<CustomDot />}
+      rtl={false}
     >
       {carouselData.map((item) => (
         <Box
