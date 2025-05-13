@@ -5,6 +5,7 @@ import Providers from "@/components/Providers";
 import SocialBar from "@/sections/SocialBar";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
+import Footer from "@/sections/Footer";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -41,6 +42,7 @@ export default function RootLayout({
           />
           <Navbar />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>
