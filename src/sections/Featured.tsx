@@ -8,6 +8,8 @@ const Featured = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["singleProduct"],
     queryFn: () => getProductById(36),
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 
   if (isError) return <div>Something went wrong.</div>;

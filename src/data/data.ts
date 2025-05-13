@@ -62,3 +62,10 @@ export const posts = [
     comments: 10,
   },
 ];
+
+export const usersInfo = [
+  { number: "15K", tag: "Happy Customers" },
+  { number: "150K", tag: "Monthly Visitors" },
+  { number: "15", tag: "Countries Worldwide" },
+  { number: "100+", tag: "Top Partners" },
+];
