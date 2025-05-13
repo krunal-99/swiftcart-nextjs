@@ -32,7 +32,7 @@ import {
   Typography,
 } from "@mui/material";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -43,41 +43,54 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { logout } from "@/store/authSlice";
 import { RootState } from "@/components/Providers";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [isFixed, setIsFixed] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
+
   const dispatch = useDispatch();
   const pathname = usePathname();
+  const router = useRouter();
   const isActiveLink = (path: string): boolean => {
     if (path === HomePath && pathname === HomePath) return true;
     if (path !== HomePath && pathname.includes(path)) return true;
     return false;
   };
-  const { isAuthenticated, user } = useSelector(
-    (state: RootState) => state.auth
-  );
+
   const handleCloseUserMenu = (setting?: string) => {
     if (setting === "LOGOUT") {
       dispatch(logout());
-      localStorage.clear();
-      window.location.href = LoginPath;
+      router.push(LoginPath);
     }
     setAnchorElUser(null);
   };
+
   const settings = isAuthenticated
     ? ["PROFILE", "LOGOUT"]
     : ["REGISTER", "LOGIN"];
+
   const handleDrawerClose = () => {
     setDrawerOpen(false);
   };
+
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
+
   return (
     <>
       <AppBar
@@ -120,9 +133,34 @@ const Navbar = () => {
                   <Button
                     sx={{
                       my: 2,
-                      color: "#737373",
+                      color: isActiveLink(
+                        navLink === "HOME"
+                          ? HomePath
+                          : `/${navLink.toLowerCase()}`
+                      )
+                        ? "#23a6f0"
+                        : "#737373",
                       display: "block",
-                      fontWeight: 700,
+                      fontWeight: isActiveLink(
+                        navLink === "HOME"
+                          ? HomePath
+                          : `/${navLink.toLowerCase()}`
+                      )
+                        ? 800
+                        : 700,
+                      position: "relative",
+                      transition: "all 0.3s ease",
+                      transform: isActiveLink(
+                        navLink === "HOME"
+                          ? HomePath
+                          : `/${navLink.toLowerCase()}`
+                      )
+                        ? "scale(1.05)"
+                        : "scale(1)",
+                      "&:hover": {
+                        color: "#23a6f0",
+                        transform: "scale(1.05)",
+                      },
                     }}
                   >
                     {navLink}
@@ -154,26 +192,32 @@ const Navbar = () => {
                   </Badge>
                 </IconButton>
               </Link>
-              <Tooltip title="User Profile">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    sx={{
-                      bgcolor: "#23a6f0",
-                    }}
-                  >
-                    {isAuthenticated && user?.imageUrl ? (
-                      <Box
-                        component="img"
-                        src={`${user.imageUrl}`}
-                        width={40}
-                        height={40}
-                      ></Box>
-                    ) : (
-                      <Person2Icon />
-                    )}
-                  </Avatar>
-                </IconButton>
-              </Tooltip>
+              {mounted && (
+                <Tooltip title="User Profile">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      sx={{
+                        bgcolor: "#23a6f0",
+                      }}
+                    >
+                      {isAuthenticated && user?.imageUrl ? (
+                        <Box
+                          component="img"
+                          src={user.imageUrl}
+                          alt="User avatar"
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      ) : (
+                        <Person2Icon />
+                      )}
+                    </Avatar>
+                  </IconButton>
+                </Tooltip>
+              )}
               <Menu
                 sx={{ mt: "45px" }}
                 id="menu-appbar"
@@ -260,13 +304,34 @@ const Navbar = () => {
                     navLink === "HOME" ? HomePath : `${navLink.toLowerCase()}`
                   }
                 >
-                  <ListItemButton>
+                  <ListItemButton
+                    sx={{
+                      backgroundColor: isActiveLink(
+                        navLink === "HOME"
+                          ? HomePath
+                          : `/${navLink.toLowerCase()}`
+                      )
+                        ? "rgba(35, 166, 240, 0.08)"
+                        : "transparent",
+                      "&:hover": {
+                        backgroundColor: "rgba(35, 166, 240, 0.12)",
+                      },
+                      transition: "background-color 0.3s ease",
+                    }}
+                  >
                     <ListItemText
                       primary={navLink}
                       sx={{
                         textAlign: "center",
                         fontWeight: "bold",
-                        color: "#737373",
+                        color: isActiveLink(
+                          navLink === "HOME"
+                            ? HomePath
+                            : `/${navLink.toLowerCase()}`
+                        )
+                          ? "#23a6f0"
+                          : "#737373",
+                        transition: "color 0.3s ease",
                       }}
                     />
                   </ListItemButton>
