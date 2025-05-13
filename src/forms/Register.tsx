@@ -28,6 +28,8 @@ import { LoginPath } from "../constants/constants";
 import axiosInstance from "../utils/instance";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { handleRegister } from "@/actions/serverActions";
+
 export const iconMap: { [key: string]: React.ElementType } = {
   name: AccountCircleIcon,
   email: EmailIcon,
@@ -38,17 +40,10 @@ const Register: React.FC = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const [userInfo, setUserInfo] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -56,42 +51,30 @@ const Register: React.FC = () => {
       reader.readAsDataURL(file);
     }
   };
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setUserInfo((prev) => ({ ...prev, [name]: value }));
-  };
-  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const { name, email, password } = userInfo;
-    if (!name || !email || !password) {
-      return handleError("All fields are required");
-    }
-    if (!selectedFile) {
-      return handleError("Please select an image");
-    }
-    try {
-      setIsLoading(true);
-      const imageUrl = await uploadImageToCloudinary(selectedFile);
-      const response = await axiosInstance.post(
-        "/api/auth/register",
-        JSON.stringify({ ...userInfo, imageUrl })
-      );
-      if (response.data.status === "success") {
-        handleSuccess(`${response.data.data}`);
-        router.push(LoginPath);
-        formRef.current?.reset();
-        setUserInfo({ name: "", email: "", password: "" });
-        setImagePreview(null);
-        setSelectedFile(null);
-      }
-    } catch (error) {
-      console.error("Registration error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
   return (
-    <Box component="form" ref={formRef} noValidate onSubmit={handleFormSubmit}>
+    <Box
+      component="form"
+      ref={formRef}
+      noValidate
+      action={async (formData: FormData) => {
+        setIsLoading(true);
+        try {
+          const result = await handleRegister(formData);
+          if (result?.success) {
+            handleSuccess(result.message || "Registration successful!");
+            router.push(LoginPath);
+            formRef.current?.reset();
+            setImagePreview(null);
+          } else {
+            handleError(result?.message || "Registration failed");
+          }
+        } catch (error) {
+          handleError("An error occurred during registration");
+          console.error("Registration error:", error);
+        }
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -159,6 +142,7 @@ const Register: React.FC = () => {
           >
             <input
               type="file"
+              name="image"
               hidden
               accept="image/*"
               onChange={handleImageChange}
@@ -172,8 +156,6 @@ const Register: React.FC = () => {
         <TextField
           key={field.id}
           margin="normal"
-          onChange={handleChange}
-          value={userInfo[field.id as keyof typeof userInfo]}
           required
           fullWidth
           id={field.id}
@@ -194,8 +176,6 @@ const Register: React.FC = () => {
         />
       ))}
       <TextField
-        onChange={handleChange}
-        value={userInfo.password}
         margin="normal"
         required
         fullWidth
