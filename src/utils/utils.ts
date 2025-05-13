@@ -2,6 +2,10 @@ import { toast } from "react-toastify";
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export const handleSuccess = (msg: string) => {
+  toast.success(msg);
+};
+
 export const handleError = (msg: string | string[]) => {
   const errors = Array.isArray(msg)
     ? msg

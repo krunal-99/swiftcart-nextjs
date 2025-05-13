@@ -9,3 +9,13 @@ export const getCategories = async () => {
   const response = await axiosInstance.get("/categories");
   return response.data.data;
 };
+
+export const getRandomProducts = async () => {
+  const response = await axiosInstance.get("/products");
+  return response.data.data;
+};
+
+export const getAdProducts = async () => {
+  const response = await axiosInstance.get("/products/ad");
+  return response.data.data;
+};

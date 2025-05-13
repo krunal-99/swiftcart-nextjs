@@ -1,16 +1,14 @@
 "use client";
-
-import React from "react";
 import { Box, Typography, Grid, Skeleton } from "@mui/material";
 import { useDispatch } from "react-redux";
+import { setBrands, setCategory } from "../store/productSlice";
+import { CategoryItem } from "../themes/ComponentThemes";
 import { getCategories } from "../utils/product";
 import { useQuery } from "@tanstack/react-query";
 import { ShopPath } from "../constants/constants";
 import Link from "next/link";
-import { setBrands, setCategory } from "@/store/productSlice";
-import { CategoryItem } from "@/themes/ComponentThemes";
 
-const Categories: React.FC = () => {
+const Categories = () => {
   const dispatch = useDispatch();
   const handleCategoryClick = (category: number) => {
     dispatch(setCategory(category));

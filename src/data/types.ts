@@ -42,3 +42,15 @@ export interface ProductState {
   brands: string[];
   filteredProducts: Product[];
 }
+
+export interface ProductCardProps {
+  product: Product;
+  isLoading: Boolean;
+}
+
+export interface Wishlist {
+  id: number;
+  product: Product;
+  productId: number;
+  userId: number;
+}

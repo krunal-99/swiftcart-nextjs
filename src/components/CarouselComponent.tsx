@@ -1,3 +1,4 @@
+"use client";
 import "react-multi-carousel/lib/styles.css";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -99,6 +100,11 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({
     };
   }, []);
 
+  if (!carouselData || carouselData.length === 0) {
+    console.log("No carousel data available");
+    return null;
+  }
+
   return (
     <Carousel
       responsive={carouselResponsive}
@@ -111,7 +117,6 @@ const CarouselComponent: React.FC<CarouselComponentProps> = ({
       customLeftArrow={<CustomLeftArrow />}
       customRightArrow={<CustomRightArrow />}
       customDot={<CustomDot />}
-      rtl={false}
     >
       {carouselData.map((item) => (
         <Box
