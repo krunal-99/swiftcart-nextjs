@@ -8,53 +8,55 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+// Only add auth interceptor on client side
+if (typeof window !== "undefined") {
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
     }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+  );
 
-axiosInstance.interceptors.response.use(
-  (response) => {
-    const { status } = response;
-    switch (status) {
-      case 200:
-        return response;
-      case 201:
-        console.log("Resource created successfully");
-        return response;
-      default:
-        return response;
-    }
-  },
-  (error) => {
-    const { response } = error;
-    const message = response?.data?.message || "Something went wrong";
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      const { status } = response;
+      switch (status) {
+        case 200:
+          return response;
+        case 201:
+          console.log("Resource created successfully");
+          return response;
+        default:
+          return Promise.reject("Something went wrong");
+      }
+    },
+    (error) => {
+      const { response } = error;
 
-    switch (response?.status) {
-      case 401:
-        localStorage.removeItem("access_token");
-        handleError("Unauthorized access. Please login again.");
-        window.location.href = LoginPath;
-        break;
-      case 402:
-        handleError(response.data.data);
-        break;
-      case 404:
-        handleError("Requested resource not found.");
-        break;
-      default:
-        return;
+      switch (response?.status) {
+        case 401:
+          localStorage.removeItem("access_token");
+          handleError("Unauthorized access. Please login again.");
+          window.location.href = LoginPath;
+          break;
+        case 402:
+          handleError(response.data.data);
+          break;
+        case 404:
+          handleError("Requested resource not found.");
+          break;
+        default:
+          return;
+      }
+      return Promise.reject(error);
     }
-    return Promise.reject(error);
-  }
-);
+  );
+}
 
 export default axiosInstance;

@@ -1,3 +1,4 @@
+"use server";
 import axiosInstance from "@/utils/instance";
 import { uploadImageToCloudinary } from "@/utils/utils";
 
@@ -14,18 +15,16 @@ export async function handleRegister(formData: FormData) {
         message: "All fields are required",
       };
     }
-    if (!image || !(image instanceof File) || image.size === 0) {
-      return {
-        success: false,
-        message: "Please select an image",
-      };
-    }
-    const imageUrl = await uploadImageToCloudinary(image);
-    if (!imageUrl) {
-      return {
-        success: false,
-        message: "Failed to upload image",
-      };
+
+    let imageUrl = null;
+    if (image && image instanceof File && image.size > 0) {
+      imageUrl = await uploadImageToCloudinary(image);
+      if (!imageUrl) {
+        return {
+          success: false,
+          message: "Failed to upload image",
+        };
+      }
     }
 
     const response = await axiosInstance.post(
@@ -33,22 +32,71 @@ export async function handleRegister(formData: FormData) {
       JSON.stringify({ name, email, password, imageUrl })
     );
 
-    if (response.data.status === "success") {
+    const responseData = response?.data || response;
+
+    if (
+      (response?.status === 201 || response?.status === 200) &&
+      responseData?.status === "success"
+    ) {
       return {
         success: true,
-        message: response.data.data,
+        message: responseData.data || "Registration successful",
       };
     } else {
       return {
         success: false,
-        message: response.data.message || "Registration failed",
+        message: responseData?.data || "Registration failed",
       };
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Registration error:", error);
     return {
       success: false,
-      message: "An error occurred during registration",
+      message:
+        error?.response?.data?.message ||
+        "An error occurred during registration",
+    };
+  }
+}
+
+export async function handleLogin(formData: FormData) {
+  try {
+    const email = formData.get("email")?.toString();
+    const password = formData.get("password")?.toString();
+
+    if (!email || !password) {
+      return {
+        success: false,
+        message: "All fields are required",
+      };
+    }
+
+    const response = await axiosInstance.post(
+      "/api/auth/login",
+      JSON.stringify({ email, password })
+    );
+
+    const responseData = response?.data || response;
+
+    if (responseData?.status === "success") {
+      return {
+        success: true,
+        message: responseData.data || "Login successful",
+        user: responseData.user,
+        token: responseData.token,
+      };
+    } else {
+      return {
+        success: false,
+        message: responseData?.data || "Login failed",
+      };
+    }
+  } catch (error: any) {
+    console.error("Login error:", error);
+    return {
+      success: false,
+      message:
+        error?.response?.data?.message || "An error occurred during login",
     };
   }
 }

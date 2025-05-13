@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -18,54 +18,44 @@ import { handleError, handleSuccess } from "../utils/utils";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authSlice";
 import { HomePath, RegisterPath } from "../constants/constants";
-import axiosInstance from "../utils/instance";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { handleLogin } from "@/actions/serverActions";
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [loginInfo, setLoginInfo] = useState({ email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setLoginInfo((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsLoading(true);
-    const { email, password } = loginInfo;
-
-    if (!email || !password) {
-      handleError("All fields are required");
-      setIsLoading(false);
-      return;
-    }
-    const response = await axiosInstance.post(
-      "/api/auth/login",
-      JSON.stringify({ ...loginInfo })
-    );
-    if (response.data.status === "failed") {
-      handleError(`${response.data.data}`);
-    } else {
-      handleSuccess(`${response.data.data}`);
-      dispatch(login({ user: response.data.user, token: response.data.token }));
-      router.push(HomePath);
-      formRef.current?.reset();
-      setLoginInfo({ email: "", password: "" });
-    }
-    setIsLoading(false);
-  };
   return (
-    <Box component="form" ref={formRef} onSubmit={handleFormSubmit} noValidate>
+    <Box
+      component="form"
+      ref={formRef}
+      noValidate
+      action={async (formData: FormData) => {
+        setIsLoading(true);
+        try {
+          const result = await handleLogin(formData);
+          if (result?.success) {
+            handleSuccess(result.message || "Login successful!");
+            dispatch(login({ user: result.user, token: result.token }));
+            router.push(HomePath);
+            formRef.current?.reset();
+          } else {
+            handleError(result?.message || "Login failed");
+          }
+        } catch (error) {
+          handleError("An error occurred during login");
+          console.error("Login error:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }}
+    >
       <TextField
         margin="normal"
-        onChange={handleChange}
-        value={loginInfo.email}
         required
         fullWidth
         id="email"
@@ -87,8 +77,6 @@ const Login: React.FC = () => {
 
       <TextField
         margin="normal"
-        onChange={handleChange}
-        value={loginInfo.password}
         required
         fullWidth
         name="password"

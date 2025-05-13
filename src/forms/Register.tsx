@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -19,13 +19,8 @@ import LockIcon from "@mui/icons-material/Lock";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { registerFormFields } from "../data/data";
-import {
-  handleError,
-  handleSuccess,
-  uploadImageToCloudinary,
-} from "../utils/utils";
+import { handleError, handleSuccess } from "../utils/utils";
 import { LoginPath } from "../constants/constants";
-import axiosInstance from "../utils/instance";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { handleRegister } from "@/actions/serverActions";
@@ -72,6 +67,8 @@ const Register: React.FC = () => {
         } catch (error) {
           handleError("An error occurred during registration");
           console.error("Registration error:", error);
+        } finally {
+          setIsLoading(false);
         }
       }}
     >
@@ -210,6 +207,7 @@ const Register: React.FC = () => {
         type="submit"
         fullWidth
         variant="contained"
+        disabled={isLoading}
         sx={{
           mt: 3,
           mb: 3,
