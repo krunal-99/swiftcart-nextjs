@@ -114,7 +114,7 @@ const Navbar = () => {
                   key={navLink}
                   style={{ textDecoration: "none" }}
                   href={
-                    navLink === "HOME" ? HomePath : `${navLink.toLowerCase()}`
+                    navLink === "HOME" ? HomePath : `/${navLink.toLowerCase()}`
                   }
                 >
                   <Button
