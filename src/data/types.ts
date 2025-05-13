@@ -125,3 +125,11 @@ export interface FilterParams {
   brands?: string[];
   sortBy?: SortOption;
 }
+
+export interface CartItems {
+  added_at: string;
+  id: number;
+  product: Product;
+  quantity: number;
+  selected_color: string;
+}
