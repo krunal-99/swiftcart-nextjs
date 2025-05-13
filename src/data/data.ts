@@ -124,3 +124,5 @@ export const shopCarouselResponsive = {
     slidesToSlide: 1,
   },
 };
+
+export const registerFormFields = [{ id: "name" }, { id: "email" }];
