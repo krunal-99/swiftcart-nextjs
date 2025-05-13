@@ -19,3 +19,8 @@ export const getAdProducts = async () => {
   const response = await axiosInstance.get("/products/ad");
   return response.data.data;
 };
+
+export const getProductById = async (id: number) => {
+  const response = await axiosInstance.get(`/products/${id}`);
+  return response.data.data;
+};

@@ -2,6 +2,7 @@ import HeroSection from "@/sections/HeroSection";
 import Categories from "@/sections/Categories";
 import Products from "@/sections/Products";
 import Advertisement from "@/sections/Advertisement";
+import Featured from "@/sections/Featured";
 export default function Home() {
   return (
     <>
@@ -9,6 +10,7 @@ export default function Home() {
       <Categories />
       <Products />
       <Advertisement />
+      <Featured />
     </>
   );
 }
