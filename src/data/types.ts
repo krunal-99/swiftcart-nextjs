@@ -62,3 +62,16 @@ export type contactUser = {
   subject?: string;
   message?: string;
 };
+
+export interface shopCardData {
+  id: number;
+  name: string;
+  label: string;
+  imageUrl: string;
+}
+
+export interface ShopCardProps {
+  data: shopCardData | null;
+  onClick: () => void;
+  isLoading: Boolean;
+}

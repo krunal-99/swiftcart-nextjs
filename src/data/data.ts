@@ -101,3 +101,26 @@ export const contactFormData = [
   { label: "Your Name", field: "name" },
   { label: "Email Address", field: "email" },
 ];
+
+export const shopCarouselResponsive = {
+  desktop: {
+    breakpoint: { max: 3000, min: 1280 },
+    items: 5,
+    slidesToSlide: 1,
+  },
+  laptop: {
+    breakpoint: { max: 1280, min: 1024 },
+    items: 4,
+    slidesToSlide: 1,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 640 },
+    items: 3,
+    slidesToSlide: 1,
+  },
+  mobile: {
+    breakpoint: { max: 640, min: 0 },
+    items: 1,
+    slidesToSlide: 1,
+  },
+};
