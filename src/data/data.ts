@@ -29,3 +29,36 @@ export const carouselResponsive = {
   tablet: { breakpoint: { max: 1024, min: 768 }, items: 1 },
   mobile: { breakpoint: { max: 768, min: 0 }, items: 1 },
 };
+
+export const posts = [
+  {
+    id: 1,
+    image: "/images/post1.jpeg",
+    tag: "Google",
+    title: "Loudest à la Madison #1 (L'integral)",
+    description:
+      "We focus on ergonomics and meeting you where you work. It's only a keystroke away.",
+    date: "22 April 2021",
+    comments: 10,
+  },
+  {
+    id: 2,
+    image: "/images/post2.jpeg",
+    tag: "Google",
+    title: "Loudest à la Madison #1 (L'integral)",
+    description:
+      "We focus on ergonomics and meeting you where you work. It's only a keystroke away.",
+    date: "22 April 2021",
+    comments: 10,
+  },
+  {
+    id: 3,
+    image: "/images/post3.jpeg",
+    tag: "Google",
+    title: "Loudest à la Madison #1 (L'integral)",
+    description:
+      "We focus on ergonomics and meeting you where you work. It's only a keystroke away.",
+    date: "22 April 2021",
+    comments: 10,
+  },
+];
