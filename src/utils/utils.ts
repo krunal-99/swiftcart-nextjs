@@ -69,3 +69,7 @@ export const calculateOrderTotals = (order: Order | null) => {
 
   return { totalQuantity, totalAmount };
 };
+
+export const handleInfo = (msg: string) => {
+  toast.info(msg);
+};

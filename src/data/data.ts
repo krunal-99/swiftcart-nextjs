@@ -126,3 +126,14 @@ export const shopCarouselResponsive = {
 };
 
 export const registerFormFields = [{ id: "name" }, { id: "email" }];
+
+export const requiredFieldsCheckOut = [
+  "first_name",
+  "last_name",
+  "address",
+  "city",
+  "state",
+  "pincode",
+  "country",
+  "userId",
+];

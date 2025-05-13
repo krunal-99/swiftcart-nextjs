@@ -121,4 +121,3 @@ const ContactForm = () => {
 };
 
 export default ContactForm;
-//                   variant

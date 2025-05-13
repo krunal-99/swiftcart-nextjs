@@ -181,3 +181,21 @@ export interface ProfileInfoProps {
     addresses?: Address[];
   };
 }
+
+export interface SummaryItem {
+  id: string;
+  quantity: number;
+  product: {
+    id: number;
+    title: string;
+    sale_price: string;
+    imageUrls: string[];
+  };
+}
+
+export interface Summary {
+  items: SummaryItem[];
+  subtotal: number;
+  shipping: number;
+  total: number;
+}

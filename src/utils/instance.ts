@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Only add auth interceptor on client side
 if (typeof window !== "undefined") {
   axiosInstance.interceptors.request.use(
     (config) => {
