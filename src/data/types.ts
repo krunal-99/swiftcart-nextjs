@@ -75,3 +75,53 @@ export interface ShopCardProps {
   onClick: () => void;
   isLoading: Boolean;
 }
+
+export interface Brand {
+  id: number;
+  name: string;
+  categoryId: number;
+}
+export interface Categories {
+  id: number;
+  name: string;
+  label: string;
+  imageUrl: string;
+  brands: Brand[];
+}
+
+export interface FilterBarProps {
+  isMobile: boolean;
+  onClose?: () => void;
+  categories: Categories[];
+  isLoading: Boolean;
+  selectedCategory: number;
+  selectedBrands: string[];
+  priceRange: [number, number];
+  onCategoryChange: (category: number) => void;
+  onBrandChange: (brands: string[]) => void;
+  onPriceChange: (range: [number, number]) => void;
+}
+
+export type SortOption =
+  | "popularity"
+  | "price-low"
+  | "price-high"
+  | "name-asc"
+  | "name-desc";
+
+export interface ShopHeroProps {
+  title: string;
+  subtitle: string;
+  onFilterClick?: () => void;
+  sortBy: string;
+  onSortChange: (value: SortOption) => void;
+}
+
+export interface FilterParams {
+  page?: number;
+  search?: string;
+  category?: number;
+  priceRange?: [number, number];
+  brands?: string[];
+  sortBy?: SortOption;
+}
