@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import {
   Box,
@@ -11,14 +12,14 @@ import {
   useTheme,
 } from "@mui/material";
 import CardComponent from "../components/CardComponent";
-import { Product, SortOption } from "../data/types";
+import { Product, SortOption, Categories } from "../data/types";
 import { useQuery } from "@tanstack/react-query";
 import { getCategories, getFilteredProducts } from "../utils/product";
-import { Categories } from "../data/types";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCategory, setCategory } from "../store/productSlice";
 import FilterBar from "./FilterBar";
 import ShopHero from "./ShopHero";
+import { useSearchParams } from "next/navigation";
 
 const ProductsListing: React.FC = () => {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
@@ -30,8 +31,8 @@ const ProductsListing: React.FC = () => {
   const dispatch = useDispatch();
   const appTheme = useTheme();
   const isMobile = useMediaQuery(appTheme.breakpoints.down("md"));
-  const queryParams = new URLSearchParams(location.search);
-  const searchTerm = queryParams.get("search")?.toLowerCase() || "";
+  const searchParams = useSearchParams();
+  const searchTerm = searchParams.get("search")?.toLowerCase() || "";
   const productSectionRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -70,10 +71,8 @@ const ProductsListing: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
-  console.log("categories", categories);
-
   const products = productsData?.products || [];
-  const totalProducts = productsData?.total || "";
+  const totalProducts = productsData?.total || 0;
   const categoryName =
     categories && selectedCategory > 0 && categories.length > selectedCategory
       ? categories[
@@ -86,34 +85,42 @@ const ProductsListing: React.FC = () => {
   const handleFilterToggle = () => {
     setMobileFilterOpen((prev) => !prev);
   };
+
   const handlePageChange = (
     _event: React.ChangeEvent<unknown>,
     value: number
   ) => {
     setPageNumber(value);
   };
+
   const handleBrandChange = (brands: string[]) => {
     setSelectedBrands(brands);
     setPageNumber(1);
   };
+
   const handlePriceChange = (priceRange: [number, number]) => {
     setPriceRange(priceRange);
     setPageNumber(1);
   };
+
   const handleSortChange = (sortBy: SortOption) => {
     setSortBy(sortBy);
     setPageNumber(1);
   };
+
   useEffect(() => {
     if (searchTerm && productSectionRef.current) {
       productSectionRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [searchTerm]);
+
   useEffect(() => {
     window.scrollTo({ top: 450, behavior: "smooth" });
   }, [pageNumber, categoryName]);
+
   if (categoriesError) return <Typography>Error loading categories</Typography>;
   if (productsError) return <Typography>Error loading products</Typography>;
+
   return (
     <Box
       width="80%"
@@ -188,7 +195,7 @@ const ProductsListing: React.FC = () => {
           {productsLoading ? (
             Array.from(new Array(9)).map((_, index) => (
               <Grid
-                columns={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                size={{ xs: 12, sm: 6, md: 4 }}
                 key={index}
                 display="flex"
                 justifyContent="center"
@@ -202,7 +209,7 @@ const ProductsListing: React.FC = () => {
           ) : products.length > 0 ? (
             products.map((product: Product) => (
               <Grid
-                columns={{ xs: 12, md: 6, sm: 4 }}
+                size={{ xs: 12, sm: 6, md: 4 }}
                 key={product.id}
                 display="flex"
                 justifyContent="center"

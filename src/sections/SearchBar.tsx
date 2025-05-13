@@ -3,13 +3,18 @@
 import { Box, IconButton, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setSearchTerm(searchParams.get("search") || "");
+  }, [searchParams]);
 
   const handleSearchToggle = () => {
     setIsOpen((prev) => !prev);
@@ -21,9 +26,10 @@ const SearchBar = () => {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      router.push(`/shop?search=${encodeURIComponent(searchTerm)}`);
+      router.push(`/shop?search=${encodeURIComponent(searchTerm.trim())}`);
+    } else {
+      router.push("/shop");
     }
-    setSearchTerm("");
     setIsOpen(false);
   };
 
