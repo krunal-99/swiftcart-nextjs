@@ -140,3 +140,44 @@ export interface CartData {
   updatedAt: string;
   items: CartItems[];
 }
+
+export interface OrderItem {
+  id: number;
+  image: string;
+  name: string;
+  price: string;
+  quantity: number;
+}
+
+export interface Order {
+  date: string;
+  estimated_delivery: string;
+  id: number;
+  items: OrderItem[];
+  payment_email: string;
+  payment_method: string;
+  payment_status: string;
+  shipping_address: string;
+  status: string;
+}
+
+export interface Address {
+  id: number;
+  first_name: string;
+  last_name: string;
+  street_address: string;
+  city: string;
+  state: string;
+  pincode: string;
+  country: string;
+  is_default: boolean;
+}
+
+export interface ProfileInfoProps {
+  userData: {
+    name?: string;
+    email?: string;
+    imageUrl?: string;
+    addresses?: Address[];
+  };
+}
