@@ -253,7 +253,13 @@ const Register: React.FC = () => {
       </Divider>
       <Box sx={{ textAlign: "center", mt: 2 }}>
         <Typography variant="body2">
-          Already have an account? <Link href={LoginPath}>Sign in</Link>
+          Already have an account?{" "}
+          <Link
+            href={LoginPath}
+            style={{ textDecoration: "none", listStyle: "none" }}
+          >
+            Sign in
+          </Link>
         </Typography>
       </Box>
     </Box>
