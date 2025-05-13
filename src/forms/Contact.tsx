@@ -51,7 +51,7 @@ const ContactForm = () => {
           </Typography>
         </Grid>
         {contactFormData.map((contact) => (
-          <Grid size={{ xs: 12, sm: 6 }}>
+          <Grid size={{ xs: 12, sm: 6 }} key={contact.field}>
             <TextField
               value={
                 isAuthenticated && user && isValidField(contact.field)
