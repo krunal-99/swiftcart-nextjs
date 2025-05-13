@@ -133,3 +133,10 @@ export interface CartItems {
   quantity: number;
   selected_color: string;
 }
+
+export interface CartData {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  items: CartItems[];
+}

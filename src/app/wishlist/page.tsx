@@ -70,10 +70,9 @@ const WishlistPage = () => {
             {isLoading
               ? Array.from(new Array(4)).map((_, index) => (
                   <Grid
-                    columns={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                    size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
                     key={index}
-                    display="flex"
-                    justifyContent="center"
+                    sx={{ display: "flex", justifyContent: "center" }}
                   >
                     <WishListCard />
                   </Grid>
@@ -81,10 +80,9 @@ const WishlistPage = () => {
               : wishlist &&
                 wishlist.map((item: Wishlist, index: number) => (
                   <Grid
-                    columns={{ xs: 12, sm: 6, md: 4, lg: 3 }}
+                    size={{ xs: 12, sm: 6, md: 4, lg: 3 }}
                     key={index}
-                    display="flex"
-                    justifyContent="center"
+                    sx={{ display: "flex", justifyContent: "center" }}
                   >
                     <WishListCard key={index} item={item} />
                   </Grid>
