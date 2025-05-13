@@ -96,3 +96,8 @@ export const companies = [
   "/images/company5.png",
   "/images/company6.png",
 ];
+
+export const contactFormData = [
+  { label: "Your Name", field: "name" },
+  { label: "Email Address", field: "email" },
+];

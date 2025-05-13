@@ -54,3 +54,11 @@ export interface Wishlist {
   productId: number;
   userId: number;
 }
+
+export type contactUser = {
+  name?: string;
+  email?: string;
+  phone?: number;
+  subject?: string;
+  message?: string;
+};
