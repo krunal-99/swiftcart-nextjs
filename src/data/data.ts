@@ -69,3 +69,30 @@ export const usersInfo = [
   { number: "15", tag: "Countries Worldwide" },
   { number: "100+", tag: "Top Partners" },
 ];
+
+export const team = [
+  {
+    imageUrl: "/images/team1.jpg",
+    username: "John Doe",
+    profession: "Project Manager",
+  },
+  {
+    imageUrl: "/images/team2.jpg",
+    username: "Karen Page",
+    profession: "Senior Software Developer",
+  },
+  {
+    imageUrl: "/images/team3.jpg",
+    username: "Jessica Jones",
+    profession: "Software Developer",
+  },
+];
+
+export const companies = [
+  "/images/company1.png",
+  "/images/company2.png",
+  "/images/company3.png",
+  "/images/company4.png",
+  "/images/company5.png",
+  "/images/company6.png",
+];
