@@ -44,6 +44,10 @@ import { logout } from "@/store/authSlice";
 import { RootState } from "@/components/Providers";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getWishListItems } from "@/utils/wishlist";
+import { getCartItems } from "@/utils/cart";
+import { CartItems } from "@/data/types";
 
 const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -56,6 +60,11 @@ const Navbar = () => {
 
   useEffect(() => {
     setMounted(true);
+    const handleScroll = () => {
+      setIsFixed(window.scrollY > 65);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -90,6 +99,22 @@ const Navbar = () => {
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
+  const { data: wishlist } = useQuery({
+    queryKey: ["wishlist", user?.id],
+    queryFn: getWishListItems,
+    enabled: !!user?.id,
+  });
+
+  const { data: cart } = useQuery({
+    queryKey: ["cart", user?.id],
+    queryFn: getCartItems,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+  const cartItems = cart && cart.data[0]?.items;
+  const totalQuantity = cartItems?.reduce((sum: number, item: CartItems) => {
+    return sum + item.quantity;
+  }, 0);
 
   return (
     <>
@@ -104,7 +129,12 @@ const Navbar = () => {
         }}
       >
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
+          <Toolbar
+            disableGutters
+            sx={{
+              minHeight: { xs: "64px", md: "70px" },
+            }}
+          >
             <Link href={HomePath} style={{ listStyle: "none", color: "white" }}>
               <Typography
                 variant="h5"
@@ -171,8 +201,7 @@ const Navbar = () => {
             <Stack spacing={1} direction="row" sx={{ ml: "auto" }}>
               <SearchBar />
               <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
-                {/* <Badge badgeContent={wishlist?.length} color="error"> */}
-                <Badge color="error">
+                <Badge badgeContent={wishlist?.length} color="error">
                   <Link style={{ color: "#23a6f0" }} href={WishlistPath}>
                     <FavoriteBorderIcon />
                   </Link>
@@ -186,8 +215,7 @@ const Navbar = () => {
                     display: { xs: "none", md: "flex" },
                   }}
                 >
-                  {/* <Badge badgeContent={totalQuantity} color="error"> */}
-                  <Badge color="error">
+                  <Badge badgeContent={totalQuantity} color="error">
                     <ShoppingCartIcon />
                   </Badge>
                 </IconButton>
@@ -316,7 +344,6 @@ const Navbar = () => {
                       "&:hover": {
                         backgroundColor: "rgba(35, 166, 240, 0.12)",
                       },
-                      transition: "background-color 0.3s ease",
                     }}
                   >
                     <ListItemText
@@ -346,8 +373,7 @@ const Navbar = () => {
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Badge
                       style={{ color: "#23a6f0" }}
-                      // badgeContent={totalQuantity}
-                      badgeContent="0"
+                      badgeContent={totalQuantity}
                       color="error"
                     >
                       <ShoppingCartIcon />
@@ -361,8 +387,7 @@ const Navbar = () => {
                 sx={{ display: "flex", justifyContent: "center" }}
               >
                 <Stack direction="row" alignItems="center" spacing={1}>
-                  {/* <Badge badgeContent={wishlist?.length} color="error"> */}
-                  <Badge color="error">
+                  <Badge badgeContent={wishlist?.length} color="error">
                     <Link style={{ color: "#23a6f0" }} href={WishlistPath}>
                       <FavoriteBorderIcon />
                     </Link>
