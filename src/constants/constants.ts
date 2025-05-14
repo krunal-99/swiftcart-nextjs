@@ -11,3 +11,4 @@ export const ProfilePath = "/profile";
 export const CheckOutPath = "/checkout";
 export const ErrorPath = "/error";
 export const SuccessPath = "/success";
+export const OrderPath = "/order";

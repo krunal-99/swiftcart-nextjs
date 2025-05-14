@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import AuthSync from "./AuthSync";
 
 const theme = createTheme({
   palette: {
@@ -38,6 +39,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const client = new QueryClient();
   return (
     <Provider store={store}>
+      <AuthSync />
       <QueryClientProvider client={client}>
         <ThemeProvider theme={theme}>{children}</ThemeProvider>
       </QueryClientProvider>

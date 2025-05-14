@@ -23,6 +23,7 @@ import { CartItems } from "@/data/types";
 import Link from "next/link";
 import CheckoutForm from "@/forms/Checkout";
 import OrderSummary from "@/sections/OrderSummary";
+import PrivateRoute from "@/components/PrivateRoute";
 
 const Checkout = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -124,64 +125,66 @@ const Checkout = () => {
   }
 
   return (
-    <Container
-      maxWidth="lg"
-      sx={{ py: 6, minHeight: "100vh", bgcolor: "grey.100" }}
-    >
-      <Box
-        component={Link}
-        href={HomePath}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          color: "primary.main",
-          mb: 3,
-          textDecoration: "none",
-          "&:hover": { color: "primary.dark", textDecoration: "underline" },
-          fontWeight: "medium",
-        }}
+    <PrivateRoute>
+      <Container
+        maxWidth="lg"
+        sx={{ py: 6, minHeight: "100vh", bgcolor: "grey.100" }}
       >
-        <ChevronLeftIcon sx={{ fontSize: 22, mr: 0.8 }} />
-        <Typography variant="body1">Continue Shopping</Typography>
-      </Box>
-
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: "bold",
-          mb: 4,
-          color: "primary.main",
-          textAlign: "center",
-          letterSpacing: 1,
-        }}
-      >
-        Checkout
-      </Typography>
-
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: { xs: "1fr", lg: "1.5fr 1fr" },
-          gap: 4,
-        }}
-      >
-        <Paper
-          elevation={3}
-          sx={{ p: 4, borderRadius: 3, bgcolor: "background.paper" }}
+        <Box
+          component={Link}
+          href={HomePath}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            color: "primary.main",
+            mb: 3,
+            textDecoration: "none",
+            "&:hover": { color: "primary.dark", textDecoration: "underline" },
+            fontWeight: "medium",
+          }}
         >
-          <CheckoutForm
-            onSubmit={handlePlaceOrder}
-            loading={addressMutation.isPending}
-          />
-        </Paper>
-        <Paper
-          elevation={3}
-          sx={{ p: 3, borderRadius: 3, bgcolor: "background.paper" }}
+          <ChevronLeftIcon sx={{ fontSize: 22, mr: 0.8 }} />
+          <Typography variant="body1">Continue Shopping</Typography>
+        </Box>
+
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+            mb: 4,
+            color: "primary.main",
+            textAlign: "center",
+            letterSpacing: 1,
+          }}
         >
-          <OrderSummary summary={orderSummary} loading={isLoading} />
-        </Paper>
-      </Box>
-    </Container>
+          Checkout
+        </Typography>
+
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", lg: "1.5fr 1fr" },
+            gap: 4,
+          }}
+        >
+          <Paper
+            elevation={3}
+            sx={{ p: 4, borderRadius: 3, bgcolor: "background.paper" }}
+          >
+            <CheckoutForm
+              onSubmit={handlePlaceOrder}
+              loading={addressMutation.isPending}
+            />
+          </Paper>
+          <Paper
+            elevation={3}
+            sx={{ p: 3, borderRadius: 3, bgcolor: "background.paper" }}
+          >
+            <OrderSummary summary={orderSummary} loading={isLoading} />
+          </Paper>
+        </Box>
+      </Container>
+    </PrivateRoute>
   );
 };
 

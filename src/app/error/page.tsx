@@ -24,6 +24,7 @@ import { clearCartItems } from "@/utils/cart";
 import Link from "next/link";
 import { ContactPath, ShopPath } from "@/constants/constants";
 import { useSearchParams } from "next/navigation";
+import PrivateRoute from "@/components/PrivateRoute";
 
 const RedAvatar = styled(Avatar)(() => ({
   backgroundColor: red[100],
@@ -178,107 +179,109 @@ const PaymentError = () => {
   }
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)",
-        padding: 2,
-        mt: 7,
-      }}
-    >
-      <Fade in={true} timeout={500}>
-        <Paper
-          elevation={3}
-          sx={{
-            maxWidth: 480,
-            width: "100%",
-            p: { xs: 3, md: 4 },
-            backgroundColor: "rgba(255, 255, 255, 0.9)",
-            backdropFilter: "blur(10px)",
-            borderRadius: 2,
-          }}
-        >
-          <Box
+    <PrivateRoute>
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)",
+          padding: 2,
+          mt: 7,
+        }}
+      >
+        <Fade in={true} timeout={500}>
+          <Paper
+            elevation={3}
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
+              maxWidth: 480,
+              width: "100%",
+              p: { xs: 3, md: 4 },
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              backdropFilter: "blur(10px)",
+              borderRadius: 2,
             }}
           >
-            <RedAvatar>
-              <ErrorIcon fontSize="large" />
-            </RedAvatar>
-
-            <Typography
-              variant="h4"
-              component="h1"
-              fontWeight="bold"
-              gutterBottom
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+              }}
             >
-              Payment Failed
-            </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-              We couldn't process your payment. Please try again or contact
-              support.
-            </Typography>
+              <RedAvatar>
+                <ErrorIcon fontSize="large" />
+              </RedAvatar>
 
-            <InfoBox>
-              <Typography variant="body1" color="error" gutterBottom>
-                Order Details:
+              <Typography
+                variant="h4"
+                component="h1"
+                fontWeight="bold"
+                gutterBottom
+              >
+                Payment Failed
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {isLoading
-                  ? "Loading order information..."
-                  : order
-                  ? `Order ID: ${order.id}`
-                  : "No order information available"}
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                We couldn't process your payment. Please try again or contact
+                support.
               </Typography>
-            </InfoBox>
 
-            <Grid container spacing={2} sx={{ width: "100%", mt: 2 }}>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <Button
-                  component={Link}
-                  href={ShopPath}
-                  variant="contained"
-                  fullWidth
-                  sx={{
-                    bgcolor: red[600],
-                    "&:hover": { bgcolor: red[700] },
-                  }}
-                  startIcon={<ShoppingBag />}
-                >
-                  Return to Shop
-                </Button>
+              <InfoBox>
+                <Typography variant="body1" color="error" gutterBottom>
+                  Order Details:
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {isLoading
+                    ? "Loading order information..."
+                    : order
+                    ? `Order ID: ${order.id}`
+                    : "No order information available"}
+                </Typography>
+              </InfoBox>
+
+              <Grid container spacing={2} sx={{ width: "100%", mt: 2 }}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Button
+                    component={Link}
+                    href={ShopPath}
+                    variant="contained"
+                    fullWidth
+                    sx={{
+                      bgcolor: red[600],
+                      "&:hover": { bgcolor: red[700] },
+                    }}
+                    startIcon={<ShoppingBag />}
+                  >
+                    Return to Shop
+                  </Button>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Button
+                    component={Link}
+                    href={ContactPath}
+                    variant="outlined"
+                    fullWidth
+                    endIcon={<ArrowForward />}
+                  >
+                    Contact Support
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid size={{ xs: 12, sm: 6 }}>
-                <Button
-                  component={Link}
-                  href={ContactPath}
-                  variant="outlined"
-                  fullWidth
-                  endIcon={<ArrowForward />}
-                >
-                  Contact Support
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
+            </Box>
 
-          <Divider sx={{ my: 3 }} />
+            <Divider sx={{ my: 3 }} />
 
-          <Typography variant="body2" color="text.secondary" align="center">
-            If you believe this is an error, please contact our support team for
-            assistance.
-          </Typography>
-        </Paper>
-      </Fade>
-    </Box>
+            <Typography variant="body2" color="text.secondary" align="center">
+              If you believe this is an error, please contact our support team
+              for assistance.
+            </Typography>
+          </Paper>
+        </Fade>
+      </Box>
+    </PrivateRoute>
   );
 };
 
